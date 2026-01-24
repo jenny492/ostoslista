@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
 import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
-import { Checkbox } from '@futurejj/react-native-checkbox';
 import { useState } from 'react';
 
 export default function App() {
@@ -13,20 +12,38 @@ export default function App() {
     setItem('');
   };
 
+  const clearItems = () => {
+    setItems([]);
+  }
+
   return (
     <View style={styles.container}>
-      <Text>Shopping list</Text>
-      <TextInput
-        style={styles.input}
-        value={item}
-        onChangeText={text => setItem(text)}
-      />
-      <Button title="Add" onPress={addItem} />
 
-      <FlatList
-        data={items}
-        renderItem={({ item }) => <Text>{item}</Text>}
-      />
+      <View style={styles.bodyContainer}>
+        <Text style={styles.header}>Shopping list</Text>
+        <Text style={styles.text}>Add an item:</Text>
+        <TextInput
+          style={styles.input}
+          value={item}
+          onChangeText={text => setItem(text)}
+        />
+        <Button
+          title="Add"
+          onPress={addItem} />
+      </View>
+
+      <View style={styles.bodyContainer}>
+        <Text style={styles.header}>Items:</Text>
+        <FlatList
+          data={items}
+          renderItem={({ item }) =>
+              <Text style={styles.listItem}>{item}</Text>
+          }
+        />
+        <Button
+          title="Clear list"
+          onPress={clearItems} />
+      </View>
       <StatusBar style="auto" />
     </View>
   );
@@ -34,15 +51,32 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    paddingTop: 50,
+    backgroundColor: '#ffffff',
+    paddingTop: 70,
+    paddingHorizontal: 40,
+  },
+  bodyContainer: {
+    marginBottom: 20,
+    gap: 10,
+  },
+  bodyContainer: {
+    marginTop: 20,
+    gap: 10,
   },
   input: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    width: '50%',
-  }
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  text: {
+    fontSize: 16,
+    marginTop: 20,
+  },
+  listItem: {
+    fontSize: 16,
+  },
 });
