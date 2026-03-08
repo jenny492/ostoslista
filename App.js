@@ -13,12 +13,9 @@ export default function App() {
   const initialize = async () => {
     try {
       await db.execAsync(`
-        DROP TABLE IF EXISTS shoppinglist;
         CREATE TABLE IF NOT EXISTS shoppinglist (id INTEGER PRIMARY KEY NOT NULL, product TEXT, amount TEXT);
         `);
       await updateList();
-      const info = await db.getAllAsync("PRAGMA table_info(shoppinglist)");
-      console.log(info);
     } catch (error) {
       console.error('Could not open database', error);
     }
@@ -32,6 +29,8 @@ export default function App() {
     try {
       await db.runAsync('INSERT INTO shoppinglist (product, amount) VALUES (?, ?)', product, amount);
       await updateList();
+      setProduct('');
+      setAmount('');
     } catch (error) {
       console.error('Could not save to database', error)
     }
@@ -84,9 +83,9 @@ export default function App() {
           data={items}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) =>
-            <View>
-              <Text style={styles.listItem}>{item.product}</Text>
-              <Text>{item.amount}</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={styles.listItem}>{item.product}, {item.amount}</Text>
+              <Text style={styles.listDelete} onPress={() => deleteItem(item.id)}>Bought</Text>
             </View>
           }
         />
@@ -116,5 +115,9 @@ const styles = StyleSheet.create({
   },
   listItem: {
     fontSize: 16,
+  },
+  listDelete: {
+    flex: 1,
+    textAlign: 'right'
   },
 });
