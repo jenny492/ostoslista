@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useState } from 'react';
 
@@ -44,7 +43,6 @@ export default function App() {
           title="Clear list"
           onPress={clearItems} />
       </View>
-      <StatusBar style="auto" />
     </View>
   );
 }
@@ -57,9 +55,6 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     marginBottom: 20,
-    gap: 10,
-  },
-  bodyContainer: {
     marginTop: 20,
     gap: 10,
   },
