@@ -47,7 +47,7 @@ export default function App() {
 
   const deleteItem = async (id) => {
     try {
-      await db.runAsync('DELETE FROM shoppinglist WHERE id=?', id);
+      await db.runAsync('DELETE FROM shoppinglist WHERE id=?', id); // tässä on oltava async, koska muuten ei odoteta, että tietokanta on valmis ennen kuin päivitetään lista
       await updateList();
     }
     catch (error) {
