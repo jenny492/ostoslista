@@ -1,6 +1,8 @@
 import * as SQLite from 'expo-sqlite';
-import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { useEffect, useState } from 'react';
+import { PaperProvider, Button, Appbar, TextInput, Text } from 'react-native-paper';
+import { StatusBar } from 'expo-status-bar';
 
 const db = SQLite.openDatabaseSync('shoppinglistdb');
 
@@ -56,45 +58,47 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-
-      <View style={styles.bodyContainer}>
-        <Text style={styles.header}>Shopping list</Text>
+    <PaperProvider>
+      <Appbar.Header elevated>
+        <Appbar.Content title="Shopping list" />
+      </Appbar.Header>
+      <View>
         <TextInput
           placeholder='Product'
-          style={styles.input}
           value={product}
           onChangeText={product => setProduct(product)}
         />
         <TextInput
           placeholder='Amount'
-          style={styles.input}
           value={amount}
           onChangeText={amount => setAmount(amount)}
         />
         <Button
           title="Add"
+          mode="contained" 
+          icon="search-web"
           onPress={saveItem} />
       </View>
 
-      <View style={styles.bodyContainer}>
-        <Text style={styles.header}>Items:</Text>
+      <View>
+        <Text>Items:</Text>
         <FlatList
           data={items}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) =>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.listItem}>{item.product}, {item.amount}</Text>
-              <Text style={styles.listDelete} onPress={() => deleteItem(item.id)}>Bought</Text>
+              <Text>{item.product}, {item.amount}</Text>
+              <Text onPress={() => deleteItem(item.id)}>Bought</Text>
             </View>
           }
         />
       </View>
-    </View>
+      <StatusBar style="auto" />
+    </PaperProvider>
   );
 }
 
-const styles = StyleSheet.create({
+/* const styles = StyleSheet.create({
   container: {
     backgroundColor: '#ffffff',
     paddingTop: 70,
@@ -120,4 +124,4 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'right'
   },
-});
+}); */
