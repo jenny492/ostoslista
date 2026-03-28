@@ -1,8 +1,8 @@
 import * as SQLite from 'expo-sqlite';
-import { FlatList, View } from 'react-native';
-import { useEffect, useState } from 'react';
-import { PaperProvider, Button, Appbar, TextInput, Text } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
+import { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { Appbar, Button, Divider, IconButton, PaperProvider, Text, TextInput } from 'react-native-paper';
 
 const db = SQLite.openDatabaseSync('shoppinglistdb');
 
@@ -62,66 +62,73 @@ export default function App() {
       <Appbar.Header elevated>
         <Appbar.Content title="Shopping list" />
       </Appbar.Header>
-      <View>
+      <View style={styles.container}>
+
         <TextInput
-          placeholder='Product'
+          style={styles.textInput}
+          label="Product"
           value={product}
           onChangeText={product => setProduct(product)}
         />
         <TextInput
-          placeholder='Amount'
+          style={styles.textInput}
+          label="Amount"
           value={amount}
           onChangeText={amount => setAmount(amount)}
         />
         <Button
-          title="Add"
-          mode="contained" 
-          icon="search-web"
-          onPress={saveItem} />
-      </View>
+          mode="contained"
+          icon="content-save"
+          onPress={saveItem}>
+          Save
+        </Button>
 
-      <View>
-        <Text>Items:</Text>
         <FlatList
+          style={styles.list}
           data={items}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) =>
-            <View style={{ flexDirection: 'row' }}>
-              <Text>{item.product}, {item.amount}</Text>
-              <Text onPress={() => deleteItem(item.id)}>Bought</Text>
+            <View style={{ width: '100%' }}>
+              <View style={styles.listItem}>
+                <View>
+                  <Text variant="titleMedium">{item.product}</Text>
+                  <Text variant="bodySmall">{item.amount}</Text>
+                </View>
+                <IconButton
+                  icon="delete"
+                  iconColor="red"
+                  onPress={() => deleteItem(item.id)}
+                />
+              </View>
+              <Divider />
             </View>
           }
         />
+
       </View>
       <StatusBar style="auto" />
     </PaperProvider>
   );
 }
 
-/* const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
-    paddingTop: 70,
-    paddingHorizontal: 40,
+    flex: 1,
+    marginTop: 10,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  bodyContainer: {
-    marginBottom: 20,
-    gap: 10,
+  textInput: {
+    width: '90%',
+    marginBottom: 10,
   },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-  },
-  header: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  list: {
+    marginTop: 10,
+    width: '90%'
   },
   listItem: {
-    fontSize: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
-  listDelete: {
-    flex: 1,
-    textAlign: 'right'
-  },
-}); */
+}); 
